@@ -1,6 +1,7 @@
 extends CharacterBody3D
 
 @onready var camera = $Camera3D
+@onready var animPlayer = $AnimationPlayer
 
 const SPEED = 10
 const JUMP_VELOCITY = 7
@@ -16,6 +17,9 @@ func _unhandled_input(event):
 		rotate_y(-event.relative.x * 0.005)
 		camera.rotate_x(-event.relative.y * 0.005)
 		camera.rotation.x = clamp(camera.rotation.x, -PI/2, PI/2)
+		
+	if Input.is_action_just_pressed("shoot") and animPlayer.current_animation != "shoot":
+		play_shoot_effects()
 	
 func _physics_process(delta):
 	# Add the gravity.
@@ -36,5 +40,16 @@ func _physics_process(delta):
 	else:
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 		velocity.z = move_toward(velocity.z, 0, SPEED)
+		
+	if animPlayer.current_animation == "shoot":
+		pass
+	elif input_dir != Vector2.ZERO and is_on_floor():
+		animPlayer.play("move")
+	else:
+		animPlayer.play("idle")
 
 	move_and_slide()
+	
+func play_shoot_effects():
+	animPlayer.stop()
+	animPlayer.play("shoot")
