@@ -10,6 +10,8 @@ var health = 3
 const SPEED = 10
 const JUMP_VELOCITY = 7
 
+signal health_changed(health_value)
+
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 
@@ -84,6 +86,8 @@ func recieve_damage():
 	if health <= 0:
 		health = 3
 		position = Vector3.ZERO
+		
+	health_changed.emit(health)
 
 func _on_animation_player_animation_finished(anim_name):
 	# This resets the animation for all players to see, probably a better way to scale this
