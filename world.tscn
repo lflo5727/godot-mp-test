@@ -1,8 +1,7 @@
-[gd_scene load_steps=7 format=3 uid="uid://y26j4oh8auc3"]
+[gd_scene load_steps=6 format=3 uid="uid://y26j4oh8auc3"]
 
-[ext_resource type="PackedScene" uid="uid://dw3oefpmvdqyp" path="res://arena.tscn" id="1_c4w3s"]
 [ext_resource type="Script" path="res://world.gd" id="1_nf6kn"]
-[ext_resource type="PackedScene" uid="uid://ctmbxi6wygi7t" path="res://player.tscn" id="2_fqj6j"]
+[ext_resource type="PackedScene" uid="uid://dw3oefpmvdqyp" path="res://arena.tscn" id="2_d8e58"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_raork"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -27,6 +26,54 @@ shadow_enabled = true
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_r1etb")
 
-[node name="arena" parent="." instance=ExtResource("1_c4w3s")]
+[node name="arena" parent="." instance=ExtResource("2_d8e58")]
 
-[node name="Player" parent="." instance=ExtResource("2_fqj6j")]
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="MainMenu" type="PanelContainer" parent="CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 315.0
+offset_top = 199.0
+offset_right = -315.0
+offset_bottom = -199.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/MainMenu"]
+layout_mode = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/MainMenu/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="Label" type="Label" parent="CanvasLayer/MainMenu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Main Menu"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HostButton" type="Button" parent="CanvasLayer/MainMenu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Host"
+
+[node name="JoinButton" type="Button" parent="CanvasLayer/MainMenu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Join"
+
+[node name="AddressEntry" type="LineEdit" parent="CanvasLayer/MainMenu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+placeholder_text = "Enter Address to Join Here"
+alignment = 1
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("res://player.tscn")
+spawn_path = NodePath("..")
+
+[connection signal="pressed" from="CanvasLayer/MainMenu/MarginContainer/VBoxContainer/HostButton" to="." method="_on_host_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/MainMenu/MarginContainer/VBoxContainer/JoinButton" to="." method="_on_join_button_pressed"]
